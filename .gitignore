@@ -1,0 +1,55 @@
+# Research data and derived artifacts
+data/
+datasets/
+raw/
+processed/
+outputs/
+results/
+checkpoints/
+artifacts/
+predictions/
+logs/
+!src/data/
+!src/data/**
+
+# Model and data files
+*.pt
+*.pth
+*.ckpt
+*.parquet
+*.pkl
+*.pickle
+*.joblib
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.jsonl
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.autodl-sync.conf
+
+# Private-research material
+PROGRESS.md
+PUBLIC_RELEASE_AUDIT.md
+thesis/
+论文/
+prompts/
+
+# Python and editor files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+.DS_Store
+.idea/
+.vscode/

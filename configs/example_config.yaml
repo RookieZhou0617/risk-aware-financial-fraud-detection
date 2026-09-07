@@ -1,0 +1,28 @@
+seed: 7
+
+model:
+  hidden_dim: 32
+  relation_dim: 8
+  gate_prior: 0.10
+  freeze_intrinsic: true
+  source_dims:
+    financial: 32
+    mda_text: 27
+    self_history: 4
+    risk: 5
+  relation_names:
+    - shared_auditor
+    - investment
+    - related_party_transaction
+    - supply_chain
+
+training:
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  primary_metric: auc_pr
+
+evaluation:
+  strategy: expanding_window
+  checkpoint_selection: validation_only
+  prohibit_random_split: true
+  require_point_in_time_features: true
