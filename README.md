@@ -14,9 +14,9 @@ Yet unrestricted graph neural networks can propagate noisy neighbors and overwri
 
 The model treats graph information as selective incremental evidence:
 
-\[
+$$
 h_{\text{final}} = h_{\text{intrinsic}} + \Delta h_{\text{graph}}.
-\]
+$$
 
 - **Multi-source risk encoder** combines financial features, an MD&A text representation, self-history, and risk signals.
 - **Current-history deviation** represents signed change, absolute change, interaction, and cosine similarity against strictly prior company states.
