@@ -29,19 +29,19 @@ $$
 
 ```mermaid
 flowchart LR
-    F[Financial features] --> E[Multi-source current-history<br/>deviation encoder]
-    T[MD&A text representation] --> E
-    H[Self-history] --> E
-    R[Risk signals] --> E
-    E --> A[Stable intrinsic<br/>risk anchor]
-    A --> M[Risk-aware<br/>relation messages]
-    G[Heterogeneous<br/>peer graph] --> M
-    M --> Q[Relation<br/>reliability gate]
-    Q --> C[Cross-relation attention<br/>+ explicit NULL relation]
-    C --> D[Zero-initialized<br/>graph residual]
-    A --> S((+))
+    F["Financial features"] --> E["Multi-source current-history<br/>deviation encoder"]
+    T["MD&amp;A text representation"] --> E
+    H["Self-history"] --> E
+    R["Risk signals"] --> E
+    E --> A["Stable intrinsic<br/>risk anchor"]
+    A --> M["Risk-aware<br/>relation messages"]
+    G["Heterogeneous<br/>peer graph"] --> M
+    M --> Q["Relation<br/>reliability gate"]
+    Q --> C["Cross-relation attention<br/>and explicit NULL relation"]
+    C --> D["Zero-initialized<br/>graph residual"]
+    A --> S(("Add"))
     D --> S
-    S --> P[Fraud prediction]
+    S --> P["Fraud prediction"]
 ```
 
 ## Strict temporal evaluation
