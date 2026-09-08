@@ -63,12 +63,17 @@ On the 2018–2021 strict-temporal development folds, the current selective grap
 
 This result did **not** pass every preregistered stability gate: the worst-year change and cross-seed consistency were insufficient. It is therefore presented as development evidence, not as a significant, state-of-the-art, independent final OOT, or finalized-thesis claim. The 2022 snapshot is not used as the public development metric.
 
+A later fusion-position study compared the retained hidden-state residual with graph-score residual and two-view residual alternatives under the same graph context. Neither alternative consistently improved on the hidden-state residual, so the anchor-preserving hidden residual remains the current integration choice. This comparison supports the fusion position only; it does not authorize a final architecture freeze.
+
+Relation-level temporal auditing further showed that relation availability is generally more stable than learned gate values and contributions. A relation can help in one year and hurt in another, while historical relation state does not predict the direction of future utility consistently. A minimal relation-state magnitude modulator has passed strict implementation and temporal preflight, but no outer-fold performance has been accessed or claimed.
+
 ## Research findings
 
 1. Strong intrinsic risk representations should be protected from unrestricted graph message passing.
 2. Real relational signals can contain incremental fraud-risk information.
 3. Relational utility is conditional and varies across companies, relations, and time.
 4. Selective relational correction was more reliable than unrestricted joint graph training in the current development study, but full cross-year stability remains open.
+5. Stable graph availability does not imply stable predictive contribution; temporal relation state should be treated as a reliability clue rather than a direct correction signal.
 
 ## Quick start
 

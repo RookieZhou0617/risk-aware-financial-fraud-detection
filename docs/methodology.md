@@ -58,4 +58,12 @@ $$
 
 $W_{\mathrm{graph}}$ is initialized to zero. Therefore, before graph-branch training, the model exactly preserves the intrinsic representation. In the thesis development protocol, the intrinsic encoder can be frozen so that graph learning is restricted to incremental relational correction.
 
+Subsequent controlled comparisons kept the graph context fixed and moved the correction to different fusion positions. Hidden-state residual fusion remained the retained design relative to graph-score and two-view residual alternatives. This is a comparative development conclusion, not a finalized-model claim.
+
+## 8. Temporal relation state
+
+Relation availability, peer counts, learned reliability, and predictive contribution need not evolve at the same rate. The development audit found that graph availability can remain relatively persistent while gate values and relation contributions change or reverse across years. Historical relation state is therefore treated conservatively as a possible magnitude or reliability signal, not as a direct source of signed graph correction.
+
+A minimal state-aware magnitude modulator has completed point-in-time state-bank, identity, gradient, missing-state, and shuffle-path preflight checks. Its outer-fold performance has not been accessed in the public research state described here.
+
 This repository is a compact showcase implementation. It does not include the private feature pipeline, formal experiment runner, or data needed to reproduce the full thesis evidence package.

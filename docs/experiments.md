@@ -7,8 +7,11 @@ The private thesis pipeline explored how to add heterogeneous graph evidence to 
 | No-graph current-history model | Established the stable intrinsic risk anchor used by later graph studies. |
 | Unrestricted joint graph model | Unstable across years; graph integration could degrade the intrinsic representation. |
 | Frozen risk anchor | Structurally protected the intrinsic encoder and isolated graph correction. |
-| Selective relation gate | Best current graph mechanism; mean AUC-PR change of +0.006005 versus the no-graph anchor across 2018–2021 development folds. |
+| Selective hidden residual | Retained graph integration position; mean AUC-PR change of +0.006005 versus the no-graph anchor across 2018–2021 development folds. |
 | Temporal extension | Exploratory and not supported as a final extension. |
+| Fusion-position comparison | Graph-score and two-view residuals did not consistently exceed the retained hidden-state residual. |
+| Relation-state audit | Relation availability was relatively persistent, while learned gates and contributions changed substantially across years. |
+| Relation-state modulation | Strict preflight passed, but outer-fold performance was not accessed; no performance claim is made. |
 
 The selective graph model improved AUC-PR in three of four development years, but it did **not** pass all preregistered acceptance gates because the worst-year change and cross-seed stability were insufficient. Accordingly, this repository does not claim statistical significance, state-of-the-art performance, or a finalized thesis model.
 
@@ -18,5 +21,7 @@ The main mechanism-level findings are:
 2. Real relational structure can carry incremental fraud-risk information.
 3. Relational utility varies by company, relation, and time.
 4. Selective correction was more reliable than unrestricted integration in the current development study, while still falling short of the full stability criteria.
+5. The graph fusion position matters: moving correction to the decision score or a separate view did not improve consistently on hidden-state residual fusion.
+6. Historical relation state is an imperfect reliability signal. It may help modulate contribution magnitude, but current evidence does not support using it to determine a signed correction directly.
 
 All figures above are development evidence from previously inspected 2018–2021 folds. They are not an independent final OOT claim.
