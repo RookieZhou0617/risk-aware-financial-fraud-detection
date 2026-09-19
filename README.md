@@ -30,23 +30,7 @@ $$
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    F["Financial features"] --> E["D3 multi-source current-history<br/>deviation encoder"]
-    T["MD&amp;A text representation"] --> E
-    H["Strictly prior self-history"] --> E
-    R["Point-in-time risk signals"] --> E
-    E --> A["Frozen intrinsic<br/>risk anchor"]
-    A --> K["Stable cosine<br/>top-half peer selection"]
-    G["Heterogeneous<br/>peer graph"] --> K
-    K --> M["Risk-aware<br/>relation messages"]
-    M --> Q["Low-capacity<br/>reliability gate"]
-    Q --> C["Cross-relation attention<br/>and explicit NULL relation"]
-    C --> D["Zero-initialized<br/>F0 hidden residual"]
-    A --> S(("Add"))
-    D --> S
-    S --> P["Fraud prediction"]
-```
+![Frozen D3 plus F0 architecture](assets/d3-f0-architecture.svg)
 
 ## Strict temporal evaluation
 
