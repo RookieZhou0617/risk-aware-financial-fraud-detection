@@ -25,7 +25,8 @@ class RiskAwareGraphModel(nn.Module):
         source_dims: Mapping[str, int],
         relation_names: Sequence[str],
         hidden_dim: int = 32,
-        relation_dim: int = 8,
+        relation_dim: int = 4,
+        gate_hidden_dim: int = 8,
         gate_prior: float = 0.1,
         freeze_intrinsic: bool = True,
     ) -> None:
@@ -36,7 +37,9 @@ class RiskAwareGraphModel(nn.Module):
         self.intrinsic_encoder = MultiSourceRiskEncoder(source_dims, hidden_dim=hidden_dim)
         self.relation_embeddings = nn.Embedding(len(relation_names), relation_dim)
         self.relational_message = RiskAwareRelationalMessage(hidden_dim, relation_dim)
-        self.reliability_gate = RelationReliabilityGate(relation_dim, prior=gate_prior)
+        self.reliability_gate = RelationReliabilityGate(
+            relation_dim, hidden_dim=gate_hidden_dim, prior=gate_prior
+        )
         self.relation_fusion = CrossRelationFusion(hidden_dim, relation_dim)
         self.graph_projection = nn.Linear(hidden_dim, hidden_dim, bias=False)
         nn.init.zeros_(self.graph_projection.weight)
@@ -82,15 +85,16 @@ class RiskAwareGraphModel(nn.Module):
         else:
             h0, p0, intrinsic_details = self.intrinsic_encoder(current, history, history_mask)
 
-        contexts, statistics, availability = [], [], []
+        contexts, statistics, availability, selected_counts = [], [], [], []
         embeddings = self.relation_embeddings.weight
         for index, name in enumerate(self.relation_names):
-            context, stats, available = self.relational_message(
+            context, stats, available, counts = self.relational_message(
                 h0, p0, relations[name], embeddings[index]
             )
             contexts.append(context)
             statistics.append(stats)
             availability.append(available)
+            selected_counts.append(counts)
         relation_contexts = torch.stack(contexts, dim=1)
         relation_statistics = torch.stack(statistics, dim=1)
         relation_available = torch.stack(availability, dim=1)
@@ -108,6 +112,7 @@ class RiskAwareGraphModel(nn.Module):
             "h_intrinsic": h0,
             "p_intrinsic": p0,
             "relation_statistics": relation_statistics,
+            "selected_peer_count": torch.stack(selected_counts, dim=1),
             "relation_reliability": reliability,
             "relation_attention": relation_attention[:, :-1],
             "null_attention": relation_attention[:, -1],

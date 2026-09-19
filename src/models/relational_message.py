@@ -25,12 +25,15 @@ class RiskAwareRelationalMessage(nn.Module):
         p0: Tensor,
         edge_index: Tensor,
         relation_embedding: Tensor,
-    ) -> tuple[Tensor, Tensor, Tensor]:
+    ) -> tuple[Tensor, Tensor, Tensor, Tensor]:
         """Aggregate peer messages and return statistics for every target node.
 
         ``edge_index[0]`` contains peer indices and ``edge_index[1]`` target
-        indices. Statistics are peer count, similarity mean/std, absolute risk
-        gap mean, peer-risk dispersion, and relation-context norm.
+        indices. For each target, peers are ranked by frozen-anchor cosine
+        similarity and the stable top ``ceil(n / 2)`` are retained. Ties are
+        resolved by ascending peer index. Statistics are selected-peer count,
+        similarity mean/std, absolute risk gap mean, peer-risk dispersion, and
+        relation-context norm.
         """
         if edge_index.ndim != 2 or edge_index.shape[0] != 2:
             raise ValueError("edge_index must have shape [2, E]")
@@ -39,11 +42,13 @@ class RiskAwareRelationalMessage(nn.Module):
         context = h0.new_zeros((node_count, hidden_dim))
         statistics = h0.new_zeros((node_count, 6))
         available = torch.zeros(node_count, dtype=torch.bool, device=h0.device)
+        selected_counts = torch.zeros(node_count, dtype=torch.long, device=h0.device)
         if peers.numel() == 0:
-            return context, statistics, available
+            return context, statistics, available, selected_counts
         if peers.min() < 0 or targets.min() < 0 or peers.max() >= node_count or targets.max() >= node_count:
             raise ValueError("edge_index contains an out-of-range node index")
 
+        peers, targets = self._select_peers(h0, peers, targets)
         peer_hidden, target_hidden = h0[peers], h0[targets]
         signed = peer_hidden - target_hidden
         rel = relation_embedding.expand(peers.numel(), -1)
@@ -55,6 +60,7 @@ class RiskAwareRelationalMessage(nn.Module):
         )
         ones = h0.new_ones(peers.numel())
         counts = h0.new_zeros(node_count).index_add_(0, targets, ones)
+        selected_counts = counts.long()
         context.index_add_(0, targets, messages)
         context = context / counts.clamp_min(1)[:, None]
         available = counts > 0
@@ -84,4 +90,24 @@ class RiskAwareRelationalMessage(nn.Module):
             dim=1,
         )
         statistics = statistics * available[:, None]
-        return context, statistics, available
+        return context, statistics, available, selected_counts
+
+    @staticmethod
+    def _select_peers(h0: Tensor, peers: Tensor, targets: Tensor) -> tuple[Tensor, Tensor]:
+        """Select a deterministic, label-free top half for every target."""
+        selected = []
+        with torch.no_grad():
+            for target in torch.unique(targets, sorted=True):
+                indices = torch.nonzero(targets == target, as_tuple=False).squeeze(1)
+                # Stable cosine sorting after peer-index sorting gives the
+                # frozen F0 tie rule: similarity desc, peer index asc.
+                peer_order = torch.argsort(peers[indices], stable=True)
+                indices = indices[peer_order]
+                similarities = F.cosine_similarity(
+                    h0[peers[indices]], h0[target].expand(indices.numel(), -1), dim=1, eps=1e-8
+                )
+                similarity_order = torch.argsort(similarities, descending=True, stable=True)
+                keep = (indices.numel() + 1) // 2
+                selected.append(indices[similarity_order[:keep]])
+        selected_indices = torch.cat(selected)
+        return peers[selected_indices], targets[selected_indices]

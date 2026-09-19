@@ -11,7 +11,7 @@ from torch import Tensor, nn
 class RelationReliabilityGate(nn.Module):
     """Estimate a soft reliability score for each node-relation context."""
 
-    def __init__(self, relation_dim: int, hidden_dim: int = 16, prior: float = 0.1) -> None:
+    def __init__(self, relation_dim: int, hidden_dim: int = 8, prior: float = 0.1) -> None:
         super().__init__()
         if not 0.0 < prior < 1.0:
             raise ValueError("prior must be strictly between zero and one")

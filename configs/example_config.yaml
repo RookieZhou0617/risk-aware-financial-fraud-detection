@@ -2,9 +2,11 @@ seed: 7
 
 model:
   hidden_dim: 32
-  relation_dim: 8
+  relation_dim: 4
+  gate_hidden_dim: 8
   gate_prior: 0.10
   freeze_intrinsic: true
+  peer_selection: stable_cosine_top_ceil_half
   source_dims:
     financial: 32
     mda_text: 27

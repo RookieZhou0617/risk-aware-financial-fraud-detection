@@ -62,6 +62,7 @@ def main() -> None:
     print(f"initial graph-residual max abs={initial_identity_error:.6f}")
     print(f"loss before step={initial_loss.item():.6f}")
     print(f"loss after step={updated_loss.item():.6f}")
+    print(f"mean selected peers={updated['selected_peer_count'].float().mean().item():.6f}")
     print(f"mean NULL attention={updated['null_attention'].mean().item():.6f}")
 
 
