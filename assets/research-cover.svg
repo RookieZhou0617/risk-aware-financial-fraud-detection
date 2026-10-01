@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-labelledby="title desc">
+<title id="title">MSAR-HGRN: Financial fraud detection</title>
+<desc id="desc">A multi-source intrinsic risk anchor with selective heterogeneous relational evidence. Frozen research model; strict temporal evaluation; synthetic public demo. Decorative network on the right.</desc>
+<defs><linearGradient id="bg" x2="1" y2="0.5"><stop stop-color="#10273F"/><stop offset="1" stop-color="#183C4D"/></linearGradient></defs>
+<rect width="1280" height="400" rx="20" fill="url(#bg)"/>
+<path d="M 56 54 H 94" stroke="#6AD3C9" stroke-width="4"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="110" y="60" font-size="15" letter-spacing="3" fill="#A9C9D6">MASTER'S THESIS · RESEARCH SHOWCASE</text>
+<text x="54" y="146" font-size="67" font-weight="700" letter-spacing="-2" fill="#FFFFFF">MSAR-HGRN</text>
+<text x="57" y="196" font-size="27" fill="#EDF5F8">Financial fraud detection</text>
+<text x="57" y="240" font-size="21" fill="#BBD1DD">An intrinsic risk anchor.</text>
+<text x="57" y="272" font-size="21" fill="#BBD1DD">Selective relational evidence.</text>
+<g font-size="14" fill="#D6E9ED">
+<rect x="57" y="324" width="157" height="33" rx="16" fill="#234557"/><text x="76" y="346">Multi-source inputs</text>
+<rect x="227" y="324" width="165" height="33" rx="16" fill="#234557"/><text x="246" y="346">Temporal evaluation</text>
+<rect x="405" y="324" width="153" height="33" rx="16" fill="#234557"/><text x="424" y="346">Frozen risk anchor</text>
+</g></g>
+<g stroke="#52788B" stroke-width="1.5" opacity="0.65" fill="none"><path d="M 915 72 L 1095 81"/><path d="M 1095 81 L 1190 180"/><path d="M 1190 180 L 1130 290"/><path d="M 1130 290 L 934 305"/><path d="M 934 305 L 851 183"/><path d="M 851 183 L 915 72"/><path d="M 915 72 L 934 305"/><path d="M 1095 81 L 1130 290"/></g>
+<g stroke="#53B8B5" stroke-width="2" opacity="0.7" fill="none"><path d="M 1020 184 L 915 72"/><path d="M 1020 184 L 1095 81"/><path d="M 1020 184 L 1190 180"/><path d="M 1020 184 L 1130 290"/><path d="M 1020 184 L 934 305"/><path d="M 1020 184 L 851 183"/></g>
+<circle cx="1020" cy="184" r="71" fill="none" stroke="#609B9E" opacity="0.25"/>
+<circle cx="1020" cy="184" r="48" fill="#183E51" stroke="#82D8CD" stroke-width="2.5"/>
+<text x="1020" y="192" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" fill="#D9FFF8">ANCHOR</text>
+<circle cx="915" cy="72" r="15" fill="#7F9DB9" stroke="#A4CDD0" stroke-width="2"/><circle cx="1095" cy="81" r="11" fill="#087F8C" stroke="#A4CDD0" stroke-width="2"/><circle cx="1190" cy="180" r="15" fill="#7F9DB9" stroke="#A4CDD0" stroke-width="2"/><circle cx="1130" cy="290" r="11" fill="#087F8C" stroke="#A4CDD0" stroke-width="2"/><circle cx="934" cy="305" r="15" fill="#7F9DB9" stroke="#A4CDD0" stroke-width="2"/><circle cx="851" cy="183" r="11" fill="#087F8C" stroke="#A4CDD0" stroke-width="2"/>
+<text x="1020" y="357" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" letter-spacing="2" fill="#91B8C4">COMPANY + CONTEXT</text>
+</svg>

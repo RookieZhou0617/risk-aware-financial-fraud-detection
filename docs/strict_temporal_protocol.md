@@ -1,50 +1,45 @@
-# Strict temporal evaluation protocol
+# Temporal evaluation · 严格时序评价
 
-## Why random splitting is unsafe
+[Home](../README.md) · [Results](experiments.md)
 
-Random train/test splits mix companies and market regimes from different calendar years. In financial fraud detection, this can leak future preprocessing statistics, labels, risk estimates, text representations, or graph structure into model development. It also differs from deployment, where future years do not yet exist.
+## Annual expanding windows
 
-## Rolling development evaluation
+Selection training, validation and refitting are different operations. The supervised model-training rows start in **2016**, not 2014. The 2014–2015 snapshots provide historical / preprocessing context where allowed.
 
-The thesis used expanding, point-in-time folds:
+| Future evaluation year | Selection training | Validation | Refit window | Role |
+| ---: | :--- | ---: | :--- | :--- |
+| 2018 | 2016 | 2017 | 2016–2017 | Rolling development |
+| 2019 | 2016–2017 | 2018 | 2016–2018 | Rolling development |
+| 2020 | 2016–2018 | 2019 | 2016–2019 | Rolling development |
+| 2021 | 2016–2019 | 2020 | 2016–2020 | Rolling development |
+| 2022 | 2016–2020 | 2021 | 2016–2021 | Final fixed-protocol OOT |
 
-| Training years | Validation year | Future development fold |
-|---|---:|---:|
-| 2014–2016 | 2017 | 2018 |
-| 2014–2017 | 2018 | 2019 |
-| 2014–2018 | 2019 | 2020 |
-| 2014–2019 | 2020 | 2021 |
+Four development folds are not pooled with the final test into a five-year model-selection score.
 
-The validation year selects checkpoints or frozen protocol choices. The future fold is accessed only after selection for that fold.
+## Information boundary
 
-## Cross-fitting and historical risk banks
+- Fit normalization, imputation, PCA and trainable feature components within each fold's permitted history.
+- Build historical company summaries only from earlier available years; do not backfill from future observations.
+- Generate cross-fitted risk signals without using a row's own target label in its fitted risk model.
+- Keep model selection on the training/validation side of the boundary.
+- Use annual relation snapshots without future-year edges or future outcomes.
+- Freeze configurations and preset seeds before the final test for the corresponding evaluation protocol.
+- Keep fitted transformations, probabilities and evaluation identities auditable in the research repository.
 
-Any learned risk value used as a feature must be out-of-fold for the row that receives it. Historical cross-fitting trains only on earlier years, predicts a later held-out historical year, and stores predictions with explicit year provenance. A target-year model may consume only bank entries whose availability predates that target.
+### Historical-label availability is an assumption
 
-## Final fixed-protocol 2022 OOT
+FiGraph's annual label organization does not itself establish exact real-world disclosure dates. The thesis treats prior annual labels as available according to its annual protocol. This is a study assumption; it must not be advertised as fully verified, disclosure-date-level point-in-time deployment.
 
-Model development was closed before final D3/F0 2022 outcome access. The frozen terminal protocol used:
+### The 2022 boundary is protocol-specific
 
-| Phase | Years |
-|---|---|
-| Selection training | 2016–2020 |
-| Validation | 2021 |
-| Final refit | 2016–2021 |
-| Terminal OOT evaluation | 2022 |
+A historical candidate was evaluated on 2022 earlier in the research project. Therefore, 2022 was **not untouched throughout the entire project's history**. The current result is the terminal evaluation of the frozen MDRA / graph-residual protocol, not a claim of a pristine never-accessed holdout across all past experiments.
 
-Only three frozen arms were evaluated: D3, F0 with real relations, and F0 with matched shuffled relations. The result cannot authorize rescue, retuning, a successor model, or a second model-selection run.
+The final anchor/real/shuffle comparison and the subsequently frozen external-baseline benchmark have their own recorded protocols. Their fixed configurations are retained; no final outcomes are used here for retuning, model rescue or successor selection.
 
-The project does not describe 2022 as a pristine holdout for its entire history because an older candidate had previously been evaluated on that year. The precise claim is narrower: later D3/F0 development, structural selection, and freezing did not use the D3/F0 2022 outcome; the reported result is the final fixed-protocol OOT evaluation of that frozen framework.
+## What the public helpers do
 
-## Point-in-time rules
+`src/data/` contains small temporal-split and cross-fitting helpers. They illustrate the boundary but do not reproduce the full causal feature pipeline, native graph construction or formal artifact audit. The synthetic demo has no claim of temporal generalization.
 
-- Split raw rows by year before fitting preprocessing.
-- Fit scalers, imputers, text transforms, and learned representations inside each training boundary.
-- Use only same-company observations from earlier years for history.
-- Never use target-year labels to construct graph features, gates, peer rankings, or historical risks.
-- Select checkpoints on the validation year, not the future evaluation year.
-- Build graph inputs only from information available for the relevant snapshot.
-- Record the maximum accessible year and fail closed on unexpected future inputs.
-- Freeze protocols, model identities, source identities, and artifact hashes before outcome access.
+## Reporting rule
 
-The utilities in `src/data/temporal_split.py` encode ordering constraints, but a full application must enforce point-in-time availability in every upstream feature builder.
+Report five-seed arithmetic means separately from metrics computed on averaged probabilities. Label development, final OOT and post-hoc interpretation clearly. Never replace preset-seed summaries with the best seed or best year.

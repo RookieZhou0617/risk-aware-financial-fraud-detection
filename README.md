@@ -1,121 +1,98 @@
-# Risk-Aware Financial Fraud Detection
+<div align="center">
 
-**Multi-Source Risk-Aware Graph Learning for Financial Statement Fraud Detection**
+![MSAR-HGRN — Financial fraud detection with an intrinsic risk anchor and relational evidence](assets/research-cover.svg)
 
-Master's thesis research project at Shanghai University of Finance and Economics. This repository is a compact recruiting and research showcase by [RookieZhou0617](https://github.com/RookieZhou0617).
+# MSAR-HGRN
 
-> **Research status:** model development is closed. The frozen thesis framework is **D3 + F0**: a multi-source current-history intrinsic risk anchor plus a conservative, anchor-preserving relational residual. The single fixed-protocol 2022 OOT evaluation has been completed; no post-OOT model modification is permitted.
+Multi-Source Anchor-Guided Risk-Aware Heterogeneous Graph Residual Network
 
-## Overview
+**[English](README.md) · [中文](README_CN.md)**
 
-Financial statement fraud detection depends on more than a company's own financial performance. Listed companies are connected through shareholders, auditors, related-party transactions, investments, supply chains, people, and organizations. These heterogeneous relations may reveal risk patterns that isolated tabular models cannot see.
+[Method](#method) · [Evidence](#evidence) · [Run the demo](#run-the-demo) · [Research status](docs/research_status.md)
 
-Yet unrestricted graph neural networks can propagate noisy neighbors and overwrite a strong company-level fraud representation. This project asks: **how can heterogeneous relational information provide incremental value without damaging a strong multi-source fraud-risk anchor?**
+</div>
 
-## Frozen framework
+A master's thesis research showcase by [周文杰 · RookieZhou0617](https://github.com/RookieZhou0617), Shanghai University of Finance and Economics.
 
-The final framework treats graph information as a conservative correction:
+> **The research question:** Once a company-level risk model is already strong, what useful evidence can heterogeneous relations still add?
 
-$$
-h_{\text{final}} = h_{\text{D3}} + \Delta h_{\text{F0}}.
-$$
+This project builds a multi-source, current–history risk anchor (**MDRA**), then learns a selective graph residual on top of that frozen anchor (**MSAR-HGRN**). It studies financial-statement-fraud risk ranking on FiGraph under annual temporal evaluation—not causal fraud attribution or a production decision system.
 
-- **D3 multi-source risk anchor** combines financial features, an MD&A text representation, self-history, and point-in-time risk signals.
-- **Current-history deviation** represents signed change, absolute change, interaction, and cosine similarity against strictly prior company states.
-- **Stable peer selection** retains the top `ceil(n/2)` peers by frozen-anchor cosine similarity, with deterministic tie handling.
-- **Risk-aware relation messages** describe each selected peer relative to the target's hidden state and intrinsic risk.
-- **Relation reliability gate** uses label-free peer and context statistics to suppress unreliable evidence.
-- **NULL-aware cross-relation fusion** can abstain when no relation is useful.
-- **Zero-initialized hidden residual** preserves D3 exactly at initialization; D3 remains frozen while F0 learns only a graph correction.
+| Research setting | Evaluation | Current stage |
+| :--- | :--- | :--- |
+| Financial features + MD&A + self-history + cross-fitted risk | 2018–2021 rolling development; fixed-protocol 2022 OOT | Model frozen; five-chapter thesis draft under revision |
 
-## Architecture
+## Method
 
-![Frozen D3 plus F0 architecture](assets/d3-f0-architecture.svg)
+**Build the anchor → select relational evidence → learn a residual.**
 
-## Strict temporal evaluation
+1. **MDRA · Understand the company.** Compare each source's current state with the same company's available prior two years. Fuse current information, per-source deviations, and history availability.
+2. **Graph residual · Add context selectively.** Select the top half of peers by frozen-anchor similarity, construct risk-relative messages, and combine relation-wise means through reliability gates and NULL-aware attention.
+3. **Frozen prediction path · Preserve the starting point.** Add a zero-initialized hidden-state residual and reuse the frozen anchor classifier. Only the graph branch is trained in stage two.
 
-Random splitting is unsafe in this setting because it can mix future regimes, fitted preprocessing, labels, and historical risks into model development. The research used expanding, fold-specific temporal evaluation:
+[![Thesis Figure 3-1: multi-source risk anchor and heterogeneous graph residual framework](assets/model-framework.png)](assets/model-framework.png)
 
-| Train | Validation | Future development fold |
-|---|---:|---:|
-| 2014–2016 | 2017 | 2018 |
-| 2014–2017 | 2018 | 2019 |
-| 2014–2018 | 2019 | 2020 |
-| 2014–2019 | 2020 | 2021 |
+*Figure 3-1 from the current thesis, reused unchanged. Click for full resolution. [Detailed method](docs/methodology.md) · [Public implementation boundary](docs/implementation.md)*
 
-Model exploration was closed before final 2022 access. The final fixed protocol used 2016–2020 for selection training, 2021 for validation, 2016–2021 for refitting, and 2022 only for the terminal OOT evaluation. Cross-fitted historical risks and every fitted transform obey their point-in-time boundary. See [the strict temporal protocol](docs/strict_temporal_protocol.md).
+The residual is exactly zero **at initialization**. Frozen parameters do not guarantee better future-year performance; the NULL channel can reduce reliance on relations but does not guarantee a zero learned residual.
 
-## Final evidence
+## Evidence
 
-### 2018–2021 development folds
+![Graph increments by development year and fixed-protocol final AUC-PR](assets/evidence-overview.svg)
 
-The frozen F0-minus-D3 AUC-PR changes were:
+### Fixed-protocol 2022 OOT
 
-| 2018 | 2019 | 2020 | 2021 | Four-year mean |
-|---:|---:|---:|---:|---:|
-| +0.000142 | -0.012589 | +0.002565 | +0.014009 | +0.001032 |
+Same 5,132-company population, 123 positive cases. Primary results below are **arithmetic means over five preset seeds**, not metrics of averaged predictions. AUC-PR is computed as average precision.
 
-The mixed signs are important: F0 was retained as the conservative relational extension, not because it was uniformly better in every development year. Multiple proposed repairs and more complex aggregation, gating, temporal, fusion, and objective variants did not earn promotion under their preregistered rules.
+| Model / control | AUC-PR ↑ | AUC-ROC ↑ | LogLoss ↓ | F1 @ 0.5 ↑ | Recall @ 5% ↑ |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| MDRA · intrinsic anchor | 0.489256 | 0.945054 | 0.056671 | **0.585282** | 0.809756 |
+| MSAR-HGRN · real relations | **0.507052** | **0.947675** | **0.054272** | 0.576771 | **0.814634** |
 
-### Final fixed-protocol 2022 OOT
+Real relations improve mean AUC-PR by **+0.017797** over MDRA and **+0.017414** over the matched shuffled-relation control (AUC-PR 0.489639). Both paired comparisons are positive in 5/5 seeds.
 
-Primary results are five-seed mean AUC-PR:
+> **Interpretation, not a victory claim.** Company-level paired bootstrap 95% intervals cross zero for both comparisons. The 2019 development fold shows negative transfer, and final F1 at 0.5 decreases relative to MDRA. This is directional evidence of relational increment, not statistical significance, uniform improvement, or established temporal robustness.
 
-| Frozen arm | Mean AUC-PR | Difference |
-|---|---:|---:|
-| D3 intrinsic anchor | 0.489256 | — |
-| F0 with real relations | 0.507052 | +0.017797 vs D3 |
-| F0 with matched shuffled relations | 0.489639 | +0.017414 real vs shuffle |
+Six runnable external baselines are also reported, including LightGBM (AUC-PR 0.407467). Their input families differ from the thesis model; this is **not an input-matched architecture leaderboard**. The Source65 same-input control remains unavailable for 2022.
 
-Both comparisons were positive in **5/5 seeds**. However, paired bootstrap 95% intervals were `[-0.017470, 0.056282]` for F0 vs D3 and `[-0.017450, 0.055039]` for real vs shuffled relations. Both cross zero, so this is directionally positive OOT evidence with substantial uncertainty—not a claim of statistical significance or proven temporal robustness.
+[Full results, uncertainty & baselines →](docs/experiments.md) · [Temporal protocol →](docs/strict_temporal_protocol.md) · [Reviewed aggregate numbers →](docs/evidence.json)
 
-The ensemble F0 AUC-PR was `0.507894` versus `0.492451` for D3. F0 improved AUC-ROC and LogLoss, but Recall@5% decreased from `0.821138` to `0.813008`; Recall@10% was unchanged at `0.878049`. The result is therefore not presented as an across-the-board metric improvement. See [the evidence summary](docs/experiments.md).
-
-## Research findings
-
-1. A strong intrinsic risk representation should be protected from unrestricted graph propagation.
-2. Real relational structure can carry incremental fraud-risk information beyond the intrinsic anchor.
-3. Relational utility is conditional and can reverse across years; F0 retains genuine temporal heterogeneity.
-4. Conservative hidden-state residual correction was retained over unrestricted joint training and more elaborate alternatives.
-5. Stable relation availability does not imply stable predictive contribution, and no reliable inference-time utility selector was established.
-6. The final OOT result supports the direction of D3 + F0, while its uncertainty and metric trade-offs constrain the strength of the claim.
-
-## Quick start
+## Run the demo
 
 ```bash
+git clone https://github.com/RookieZhou0617/risk-aware-financial-fraud-detection.git
+cd risk-aware-financial-fraud-detection
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python examples/synthetic_demo.py
+python -m unittest discover -s tests -v
 ```
 
-The demo generates only synthetic company features, histories, risks, relations, and labels. It validates the public D3 + F0 model path, deterministic peer selection, loss computation, and one graph-only optimization step; it does not reproduce the thesis results.
+No dataset download, GPU, or graph-framework dependency is needed. The demo uses **entirely synthetic inputs and labels** to exercise zero-initialized residuals and one graph-only optimization step.
 
-## Repository structure
+This is a compact educational implementation, **not a one-command reproduction of the thesis**. The synthetic anchor is randomly initialized and frozen; its loss is a software smoke check, not research evidence.
 
-```text
-src/models/       compact D3 and F0 model components
-src/data/         strict temporal split and cross-fitting helpers
-src/utils/        evaluation metrics
-configs/          small public example configuration
-examples/         runnable synthetic demonstration
-docs/             methodology and evidence notes
-```
+## Explore the repository
 
-## Dataset
+| Start here | What you will find |
+| :--- | :--- |
+| [Methodology](docs/methodology.md) | Source representations, history deviations, graph residual and training boundary |
+| [Evaluation](docs/experiments.md) | Development heterogeneity, final controls, six baselines, uncertainty |
+| [Temporal protocol](docs/strict_temporal_protocol.md) | Selection / refit windows and historical-label availability assumptions |
+| [Implementation guide](docs/implementation.md) | Model-to-code map and explicit differences from the research implementation |
+| [Research & writing status](docs/research_status.md) | Frozen experiments, thesis naming, manuscript progress and branch roles |
+| [Model components](src/models/) · [Synthetic example](examples/) | Readable PyTorch components and executable demonstration |
+| [Visual assets](assets/) | Original thesis figure, cover, result chart and rendering instructions |
 
-The research is based on [FiGraph](https://github.com/XiaoguangWang23/FiGraph), a dynamic heterogeneous graph dataset for financial anomaly detection. See the [official paper](https://doi.org/10.1145/3701716.3715301) for its construction and citation.
+## Data, scope & attribution
 
-FiGraph data is **not redistributed here**. Obtain it from the original authors or official source and follow its license and usage terms, including its non-commercial-use restriction.
+The study uses [FiGraph](https://github.com/XiaoguangWang23/FiGraph); see the [dataset paper](https://doi.org/10.1145/3701716.3715301). Data is not redistributed. Obtain it from the official source and follow the authors' license and usage terms.
 
-## Repository scope
+This repository publishes reviewed aggregate results, methodology, compact code and synthetic examples. It excludes company-level data, labels, predictions, checkpoints, full experiment artifacts, private logs and thesis drafts. No post-OOT retuning is performed.
 
-This public repository is a clean research showcase. It contains a compact reimplementation of the frozen model design, strict-temporal utilities, a synthetic runnable example, and aggregate methodology/evidence documentation.
+**License status:** no open-source license has been granted for this repository yet; licensing will be clarified with the final thesis release. No ownership is claimed over FiGraph or other third-party resources.
 
-It intentionally excludes raw or processed FiGraph data, labels, sample-level predictions, checkpoints, private thesis artifacts, complete experiment history, thesis drafts, and internal research prompts. It is not a one-command reproduction package for the private thesis pipeline.
+---
 
-## License status
-
-Code is provided for research and portfolio demonstration. Licensing will be clarified with the final thesis release. No ownership is claimed over FiGraph data or third-party resources.
-
-For a shorter Chinese introduction, see [README_CN.md](README_CN.md).
+<sub>Research snapshot: 2026-10-01 · Experiment IDs D3 / F0 remain unchanged in source evidence; public thesis names are MDRA / MSAR-HGRN.</sub>

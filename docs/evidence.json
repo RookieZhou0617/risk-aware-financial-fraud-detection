@@ -1,0 +1,163 @@
+{
+  "snapshot_date": "2026-10-01",
+  "source_revision": "0776595279d9a483bb8e66b5d33dd48e51f1a28e",
+  "metric": "average_precision_score (reported as AUC-PR)",
+  "primary_aggregation": "arithmetic mean over seeds 42, 52, 62, 72, 82",
+  "population": {
+    "year": 2022,
+    "companies": 5132,
+    "positives": 123
+  },
+  "models": {
+    "MDRA": {
+      "auc_pr": 0.4892556626299589,
+      "auc_roc": 0.9450540247067473,
+      "log_loss": 0.05667134691636668,
+      "fraud_f1_at_0_5": 0.5852819696113418,
+      "recall_at_5_percent": 0.8097560975609757,
+      "recall_at_10_percent": 0.8666666666666666
+    },
+    "MSAR-HGRN": {
+      "auc_pr": 0.5070524232058331,
+      "auc_roc": 0.947674998011709,
+      "log_loss": 0.05427178030754444,
+      "fraud_f1_at_0_5": 0.5767712981042578,
+      "recall_at_5_percent": 0.8146341463414635,
+      "recall_at_10_percent": 0.8715447154471544
+    },
+    "Matched shuffle": {
+      "auc_pr": 0.4896385712377677,
+      "auc_roc": 0.9451202469700879,
+      "log_loss": 0.05649034229997163,
+      "fraud_f1_at_0_5": 0.6084234227465963,
+      "recall_at_5_percent": 0.8097560975609757,
+      "recall_at_10_percent": 0.8666666666666666
+    }
+  },
+  "baselines": {
+    "logistic_regression": {
+      "metrics": {
+        "auc_pr": 0.025248750275463652,
+        "auc_roc": 0.5002199293304572,
+        "f1_at_0_5": 0.039627039627039624,
+        "log_loss": 0.7048302315556921,
+        "recall_at_10_percent": 0.10569105691056911,
+        "recall_at_5_percent": 0.04878048780487805
+      },
+      "mode": "deterministic"
+    },
+    "lightgbm": {
+      "metrics": {
+        "auc_pr": 0.4074666158465088,
+        "auc_roc": 0.9259748712480139,
+        "f1_at_0_5": 0.31657964724393145,
+        "log_loss": 0.07293043176008737,
+        "recall_at_10_percent": 0.7642276422764228,
+        "recall_at_5_percent": 0.6227642276422765
+      },
+      "mode": "five_seed_arithmetic_mean"
+    },
+    "xgboost": {
+      "metrics": {
+        "auc_pr": 0.33648252119846117,
+        "auc_roc": 0.9216688010361838,
+        "f1_at_0_5": 0.3304635316651036,
+        "log_loss": 0.07991969880478515,
+        "recall_at_10_percent": 0.7479674796747966,
+        "recall_at_5_percent": 0.5756097560975609
+      },
+      "mode": "five_seed_arithmetic_mean"
+    },
+    "rgcn": {
+      "metrics": {
+        "auc_pr": 0.024693822286501146,
+        "auc_roc": 0.504132236770561,
+        "f1_at_0_5": 0.021701020743907444,
+        "log_loss": 2.1912743291902865,
+        "recall_at_10_percent": 0.10731707317073172,
+        "recall_at_5_percent": 0.055284552845528454
+      },
+      "mode": "five_seed_arithmetic_mean"
+    },
+    "hgt": {
+      "metrics": {
+        "auc_pr": 0.024858097189547117,
+        "auc_roc": 0.5094128130340996,
+        "f1_at_0_5": 0.03632592166844936,
+        "log_loss": 1.8602335009549045,
+        "recall_at_10_percent": 0.1154471544715447,
+        "recall_at_5_percent": 0.07317073170731707
+      },
+      "mode": "five_seed_arithmetic_mean"
+    },
+    "ffd_dhg_inspired": {
+      "metrics": {
+        "auc_pr": 0.14856972854014602,
+        "auc_roc": 0.8597422201013785,
+        "f1_at_0_5": 0.26837574561086996,
+        "log_loss": 0.18761691659521687,
+        "recall_at_10_percent": 0.6113821138211382,
+        "recall_at_5_percent": 0.40975609756097564
+      },
+      "mode": "five_seed_arithmetic_mean"
+    }
+  },
+  "development": [
+    {
+      "year": 2018,
+      "mdra": 0.5977726393909168,
+      "msar_hgrn": 0.5979146205491013,
+      "delta": 0.00014198115818442325
+    },
+    {
+      "year": 2019,
+      "mdra": 0.6360137958827558,
+      "msar_hgrn": 0.6234247481661728,
+      "delta": -0.01258904771658298
+    },
+    {
+      "year": 2020,
+      "mdra": 0.5067311310087963,
+      "msar_hgrn": 0.509296329917569,
+      "delta": 0.0025651989087727145
+    },
+    {
+      "year": 2021,
+      "mdra": 0.5795319352094103,
+      "msar_hgrn": 0.5935412854477267,
+      "delta": 0.014009350238316398
+    }
+  ],
+  "bootstrap": {
+    "replicates": 10000,
+    "valid_replicates": 10000,
+    "rng_seed": 20220918,
+    "delta_anchor": {
+      "bootstrap_mean": 0.017780956571014417,
+      "percentile_2_5": -0.01747036836830599,
+      "percentile_97_5": 0.056282278722323394,
+      "ci95": [
+        -0.01747036836830599,
+        0.056282278722323394
+      ],
+      "contains_zero": true
+    },
+    "delta_relation": {
+      "bootstrap_mean": 0.017348363909853642,
+      "percentile_2_5": -0.01745016741357452,
+      "percentile_97_5": 0.055038887179505794,
+      "ci95": [
+        -0.01745016741357452,
+        0.055038887179505794
+      ],
+      "contains_zero": true
+    },
+    "method": "Paired, class-stratified company bootstrap of five-seed mean probabilities; 10,000 resamples. These are not confidence intervals for variation across seeds."
+  },
+  "provenance": {
+    "final": "final_2022_oot/20260918T132623475938Z: seed_metrics.csv and bootstrap.json",
+    "development": "s24_2_anchor_selective_native_gnn/formal/20260905T014639704710Z: seed_metrics.csv",
+    "baselines": "baseline_benchmark/final_2022: per-model summary.json"
+  },
+  "scope": "Reviewed aggregate metrics only. No individual records, labels, predictions, or fitted parameters."
+}

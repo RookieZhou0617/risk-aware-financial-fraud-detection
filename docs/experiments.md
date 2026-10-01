@@ -1,65 +1,103 @@
-# Evidence summary
+# Experimental evidence · 实验证据
 
-This page reports only aggregate conclusions from the private thesis evidence package. The public repository contains no sample-level predictions, checkpoints, raw data, or complete experiment history.
+[Home](../README.md) · [Temporal protocol](strict_temporal_protocol.md) · [Aggregate JSON](evidence.json)
 
-## Model-selection outcome
+All figures below were checked against accepted summary/metric files, not copied from an earlier conversational summary. No inference, training or metric recomputation from private predictions was performed for this refresh. The public JSON stores only reviewed aggregates and source identifiers.
 
-Model development is closed. The frozen framework is:
+## Reading the numbers
 
-- **D3** — multi-source current-history deviation intrinsic risk anchor;
-- **F0** — frozen-anchor, conservative relational hidden-state residual.
+- **Primary metric:** AUC-PR, implemented as average precision.
+- **Primary aggregation:** arithmetic mean over seeds 42, 52, 62, 72 and 82. Deterministic logistic regression is a single result.
+- **Same final population:** 5,132 companies, 123 positive cases in 2022.
+- **Budget recall:** fraction of positives captured in the top 5% / 10% of the ranked population.
+- **F1:** fixed probability threshold 0.5, not a test-selected optimal threshold.
+- Five-seed metric means and metrics of five-seed averaged probabilities are different quantities.
 
-F0 uses stable top-half peer selection, target-relative risk-aware messages, a low-capacity relation reliability gate, NULL-aware cross-relation fusion, and a zero-initialized hidden residual. D3 remains frozen during graph-branch fitting.
+## 1 · Rolling development: an uneven relational increment
 
-More complex aggregation, gating, temporal repair, selector, fusion, ranking-objective, and robust-optimization candidates were evaluated under preregistered rules but did not provide sufficient stable evidence to replace F0. These negative and mixed results are part of the scientific conclusion: complexity was not promoted merely because it was available.
+| Year | MDRA AUC-PR | MSAR-HGRN AUC-PR | Difference |
+| ---: | ---: | ---: | ---: |
+| 2018 | 0.597773 | 0.597915 | +0.000142 |
+| 2019 | 0.636014 | 0.623425 | -0.012589 |
+| 2020 | 0.506731 | 0.509296 | +0.002565 |
+| 2021 | 0.579532 | 0.593541 | +0.014009 |
 
-## Development evidence: 2018–2021
+The four-year mean increment is **+0.001032**. The 2019 decline is part of the conclusion, not an outlier removed from reporting. Annual variation is considerably larger than the mean gain.
 
-| Future fold | F0 minus D3 AUC-PR |
-|---:|---:|
-| 2018 | +0.000142 |
-| 2019 | -0.012589 |
-| 2020 | +0.002565 |
-| 2021 | +0.014009 |
-| Equal-year mean | +0.001032 |
+![Development increments and final comparison](../assets/evidence-overview.svg)
 
-F0 was positive in three of four years, but the 2019 negative transfer is material. The model was retained as a conservative relational extension with an explicit temporal-heterogeneity caveat—not as a uniformly superior replacement for D3.
+## 2 · Final fixed-protocol anchor / relation comparison
 
-## Final fixed-protocol 2022 OOT
+| Arm | Five-seed mean AUC-PR |
+| :--- | ---: |
+| MDRA (T0_D3) | 0.489256 |
+| MSAR-HGRN, real relations (T1_F0_REAL) | 0.507052 |
+| Matched shuffled relations (T2_F0_SHUFFLE) | 0.489639 |
 
-Model exploration was closed and the D3 + F0 framework was frozen before outcome access. The terminal comparison used D3, F0 with real relations, and F0 with matched shuffled relations.
+- Real minus anchor: **+0.017797**, positive in 5/5 paired seeds.
+- Real minus matched shuffle: **+0.017414**, positive in 5/5 paired seeds.
 
-### Five-seed primary metric
+### Bootstrap uncertainty is a separate estimand
 
-| Arm | Mean AUC-PR | Difference |
-|---|---:|---:|
-| D3 | 0.489255663 | — |
-| F0 real relations | 0.507052423 | +0.017796761 vs D3 |
-| F0 matched shuffle | 0.489638571 | +0.017413852 real vs shuffle |
+The paired bootstrap first averages the five seed probabilities for each company and arm, then resamples companies within positive/negative strata. It uses 10,000 replicates. These intervals are **not across-seed confidence intervals around the table's mean metrics**.
 
-The two F0 comparisons were positive for all five matched seeds.
+| Paired comparison | Bootstrap mean difference | Percentile 95% interval |
+| :--- | ---: | :--- |
+| Real − MDRA | +0.017781 | [−0.017470, +0.056282] |
+| Real − matched shuffle | +0.017348 | [−0.017450, +0.055039] |
 
-### Uncertainty
+Both intervals cross zero. Neither 5/5 positive seeds nor the bootstrap mean establishes statistical significance.
 
-| Comparison | Paired bootstrap 95% interval |
-|---|---:|
-| F0 real minus D3 | [-0.017470368, 0.056282279] |
-| F0 real minus matched shuffle | [-0.017450167, 0.055038887] |
+### Metric trade-offs depend on aggregation
 
-Both intervals cross zero. The appropriate interpretation is directionally consistent positive OOT evidence with substantial estimation uncertainty. The result does not establish statistical significance or prove temporal robustness.
+| Reporting mode | MDRA | Real graph residual | Reading |
+| :--- | ---: | ---: | :--- |
+| Five-seed mean F1 @ 0.5 | 0.585282 | 0.576771 | Decreases |
+| Five-seed mean Recall @ 5% | 0.809756 | 0.814634 | Increases |
+| Five-seed mean Recall @ 10% | 0.866667 | 0.871545 | Increases |
+| Ensemble AUC-PR | 0.492451 | 0.507894 | Increases |
+| Ensemble Recall @ 5% | 0.821138 | 0.813008 | Decreases |
+| Ensemble Recall @ 10% | 0.878049 | 0.878049 | Unchanged |
 
-### Ensemble metrics
+The homepage consistently uses seed means. The ensemble Recall@5% decrease must not be described as a decrease in the primary five-seed mean Recall@5%.
 
-| Arm | AUC-PR | AUC-ROC | LogLoss | Recall@5% | Recall@10% |
-|---|---:|---:|---:|---:|---:|
-| D3 | 0.492451 | 0.948642 | 0.055589 | 0.821138 | 0.878049 |
-| F0 real relations | 0.507894 | 0.951169 | 0.053383 | 0.813008 | 0.878049 |
-| F0 matched shuffle | 0.492832 | 0.947592 | 0.055908 | 0.813008 | 0.878049 |
+## 3 · Six external baselines and the thesis models
 
-F0 improved ensemble AUC-PR, AUC-ROC, and LogLoss over D3, while Recall@5% was lower and Recall@10% was unchanged. No across-the-board metric improvement is claimed.
+| Model | AUC-PR ↑ | AUC-ROC ↑ | LogLoss ↓ | F1 @ 0.5 ↑ | R@5% ↑ | R@10% ↑ |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Logistic regression¹ | 0.025249 | 0.500220 | 0.704830 | 0.039627 | 0.048780 | 0.105691 |
+| LightGBM | 0.407467 | 0.925975 | 0.072930 | 0.316580 | 0.622764 | 0.764228 |
+| XGBoost | 0.336483 | 0.921669 | 0.079920 | 0.330464 | 0.575610 | 0.747967 |
+| RGCN | 0.024694 | 0.504132 | 2.191274 | 0.021701 | 0.055285 | 0.107317 |
+| HGT | 0.024858 | 0.509413 | 1.860234 | 0.036326 | 0.073171 | 0.115447 |
+| FFD-DHG-inspired² | 0.148570 | 0.859742 | 0.187617 | 0.268376 | 0.409756 | 0.611382 |
+| MDRA | 0.489256 | 0.945054 | 0.056671 | 0.585282 | 0.809756 | 0.866667 |
+| MSAR-HGRN | 0.507052 | 0.947675 | 0.054272 | 0.576771 | 0.814634 | 0.871545 |
 
-## Interpretation boundary
+¹ Deterministic single run. All other rows are five-seed arithmetic means.
 
-The final result is a fixed-protocol OOT evaluation of the frozen D3 + F0 framework. It is not a new model-selection fold, and it cannot be used to rescue, retune, or redesign the model. Earlier work had used 2022 for an older candidate, so 2022 is not described as a never-touched pristine holdout for the entire project; the later D3/F0 development and freeze did not use the D3/F0 2022 outcome.
+² FFD-DHG-inspired is an adapted implementation informed by the method, not an official exact reproduction.
 
-No post-OOT model modification, additional model-selection run, or claim of state-of-the-art performance is made.
+### Comparison boundary
+
+These models share the audited final evaluation population, but **their input families and modeling pipelines differ**. LightGBM's 0.407467 and MSAR-HGRN's 0.507052 can be compared descriptively; the difference does not isolate architecture under matched source inputs. Poor RGCN/HGT results here do not establish that these architectures are generally ineffective.
+
+The supplementary **LightGBM-Source65** same-input comparison has status `BLOCKED_INPUT_UNAVAILABLE` for 2022. No test prediction or metric exists for that row. Do not substitute the ordinary LightGBM result or another text encoder; see [the availability explanation](research_status.md#source65-is-an-availability-blocker).
+
+## 4 · What the evidence supports
+
+In this dataset and protocol, current–history deviations help construct an intrinsic anchor, and real heterogeneous relations provide directionally positive incremental evidence in the final test. The graph contribution remains year-dependent and uncertain.
+
+The results do **not** establish causal fraud transmission, uniformly positive transfer, statistical significance, broad state-of-the-art superiority, or production deployment validity. No test-driven repair or successor model is introduced by this showcase.
+
+## Provenance
+
+The aggregate snapshot was checked against research revision `0776595279d9a483bb8e66b5d33dd48e51f1a28e`.
+
+| Evidence | Accepted source |
+| :--- | :--- |
+| Development rows | `s24_2_anchor_selective_native_gnn/formal/20260905T014639704710Z/seed_metrics.csv` |
+| Final arms and bootstrap | `final_2022_oot/20260918T132623475938Z/`: seed metrics, ensemble metrics, OOT summary, bootstrap |
+| External baseline means | `baseline_benchmark/final_2022/`: each model's summary |
+
+These are source identifiers for traceability, not promises that the private artifact paths are downloadable from this public repository.
