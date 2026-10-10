@@ -8,19 +8,19 @@ Multi-Source Anchor-Guided Risk-Aware Heterogeneous Graph Residual Network
 
 **[English](README.md) · [中文](README_CN.md)**
 
-[Method](#method) · [Evidence](#evidence) · [Run the demo](#run-the-demo) · [Research status](docs/research_status.md)
+[Method](#method) · [Evidence](#evidence) · [Run the demo](#run-the-demo) · [Experiment status](docs/experiment_status.md)
 
 </div>
 
-A master's thesis research showcase by [周文杰 · RookieZhou0617](https://github.com/RookieZhou0617), Shanghai University of Finance and Economics.
+Experimental results and model components for financial-statement-fraud detection on FiGraph. Maintained by [周文杰 · RookieZhou0617](https://github.com/RookieZhou0617).
 
 > **The research question:** Once a company-level risk model is already strong, what useful evidence can heterogeneous relations still add?
 
 This project builds a multi-source, current–history risk anchor (**MDRA**), then learns a selective graph residual on top of that frozen anchor (**MSAR-HGRN**). It studies financial-statement-fraud risk ranking on FiGraph under annual temporal evaluation—not causal fraud attribution or a production decision system.
 
-| Research setting | Evaluation | Current stage |
+| Inputs | Evaluation | Experiment status |
 | :--- | :--- | :--- |
-| Financial features + MD&A + self-history + cross-fitted risk | 2018–2021 rolling development; fixed-protocol 2022 OOT | Model frozen; abstracts and Chapters 1–5 revised |
+| Financial features + MD&A + self-history + cross-fitted risk | 2018–2021 rolling development; fixed-protocol 2022 OOT | Frozen models and reviewed aggregate results |
 
 ## Method
 
@@ -30,9 +30,9 @@ This project builds a multi-source, current–history risk anchor (**MDRA**), th
 2. **Graph residual · Add context selectively.** Select the top half of peers by frozen-anchor similarity, construct risk-relative messages, and combine relation-wise means through reliability gates and NULL-aware attention.
 3. **Frozen prediction path · Preserve the starting point.** Add a zero-initialized hidden-state residual and reuse the frozen anchor classifier. Only the graph branch is trained in stage two.
 
-[![Thesis Figure 3-1: multi-source risk anchor and heterogeneous graph residual framework](assets/model-framework.png)](assets/model-framework.png)
+[![Model architecture: multi-source risk anchor and heterogeneous graph residual framework](assets/model-framework.png)](assets/model-framework.png)
 
-*Figure 3-1, exported from the latest thesis PDF without changing its layout or content. Click for full resolution. [Detailed method](docs/methodology.md) · [Public implementation boundary](docs/implementation.md)*
+*Model architecture. Click for full resolution. [Detailed method](docs/methodology.md) · [Public implementation boundary](docs/implementation.md)*
 
 The residual is exactly zero **at initialization**. Frozen parameters do not guarantee better future-year performance; the NULL channel can reduce reliance on relations but does not guarantee a zero learned residual.
 
@@ -80,7 +80,7 @@ python -m unittest discover -s tests -v
 
 No dataset download, GPU, or graph-framework dependency is needed. The demo uses **entirely synthetic inputs and labels** to exercise zero-initialized residuals and one graph-only optimization step.
 
-This is a compact educational implementation, **not a one-command reproduction of the thesis**. The synthetic anchor is randomly initialized and frozen; its loss is a software smoke check, not research evidence.
+This is a compact educational implementation, **not a one-command reproduction of the reported experiments**. The synthetic anchor is randomly initialized and frozen; its loss is a software smoke check, not experimental evidence.
 
 ## Explore the repository
 
@@ -90,18 +90,18 @@ This is a compact educational implementation, **not a one-command reproduction o
 | [Evaluation](docs/experiments.md) | History controls, module variants, final screening results, baselines and literature |
 | [Temporal protocol](docs/strict_temporal_protocol.md) | Selection / refit windows and historical-label availability assumptions |
 | [Implementation guide](docs/implementation.md) | Model-to-code map and explicit differences from the research implementation |
-| [Research & writing status](docs/research_status.md) | Frozen experiments, thesis naming, manuscript progress and branch roles |
+| [Experiment status](docs/experiment_status.md) | Completed evaluations, frozen configuration and input-availability limits |
 | [Model components](src/models/) · [Synthetic example](examples/) | Readable PyTorch components and executable demonstration |
-| [Visual assets](assets/) | Original thesis figure, cover, result chart and rendering instructions |
+| [Visual assets](assets/) | Model architecture, cover, result chart and rendering instructions |
 
 ## Data, scope & attribution
 
 The study uses [FiGraph](https://github.com/XiaoguangWang23/FiGraph); see the [dataset paper](https://doi.org/10.1145/3701716.3715301). Data is not redistributed. Obtain it from the official source and follow the authors' license and usage terms.
 
-This repository publishes reviewed aggregate results, methodology, compact code and synthetic examples. It excludes company-level data, labels, predictions, checkpoints, full experiment artifacts, private logs and thesis drafts. No post-OOT retuning is performed.
+This repository publishes reviewed aggregate results, methodology, compact code and synthetic examples. It excludes company-level data, labels, predictions, checkpoints, full experiment artifacts and private logs. No post-OOT retuning is performed.
 
-**License status:** no open-source license has been granted for this repository yet; licensing will be clarified with the final thesis release. No ownership is claimed over FiGraph or other third-party resources.
+**License status:** no open-source license has been granted for this repository yet. No ownership is claimed over FiGraph or other third-party resources.
 
 ---
 
-<sub>Research snapshot: 2026-10-11 · Frozen results unchanged; synchronized with thesis revision 4ca0c78. Experiment IDs D3 / F0 remain unchanged.</sub>
+<sub>Evidence snapshot: 2026-10-11 · Frozen results unchanged. Experiment IDs D3 / F0 remain unchanged.</sub>

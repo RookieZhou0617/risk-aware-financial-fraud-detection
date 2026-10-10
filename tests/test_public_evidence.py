@@ -77,6 +77,19 @@ class PublicEvidenceTests(unittest.TestCase):
                     continue
                 self.assertTrue((path.parent / target.split("#", 1)[0]).exists(), f"{path.name}: {target}")
 
+    def test_public_presentation_is_experiment_focused(self):
+        paths = [ROOT / "README.md", ROOT / "README_CN.md",
+                 *sorted((ROOT / "docs").glob("*.md")), ROOT / "docs/evidence.json",
+                 ROOT / "assets/README.md", ROOT / "assets/research-cover.svg",
+                 ROOT / "scripts/render_assets.py", ROOT / "examples/README.md"]
+        writing_metadata = re.compile(
+            r"thes[i]s|manu[s]cript|master['’]s|chapter[ _0-9]|毕业论文|硕士|学位|写作进",
+            re.IGNORECASE,
+        )
+        for path in paths:
+            self.assertIsNone(writing_metadata.search(path.read_text(encoding="utf-8")), path.name)
+        self.assertTrue((ROOT / "docs/experiment_status.md").exists())
+
     def test_figure_dimensions_checksum_and_svg_validity(self):
         png = (ROOT / "assets/model-framework.png").read_bytes()
         self.assertEqual(struct.unpack(">II", png[16:24]), (3000, 2187))

@@ -15,11 +15,11 @@ This repository exposes the structural idea with native PyTorch: a multi-source 
 | Synthetic graph-only step | [synthetic_demo.py](../examples/synthetic_demo.py) |
 | Software invariants | [tests](../tests/) |
 
-Existing Python class names and D3/F0 experimental identifiers are retained for compatibility. The thesis uses MDRA and MSAR-HGRN in its narrative.
+Existing Python class names and D3/F0 experimental identifiers are retained for compatibility. The corresponding model names are MDRA and MSAR-HGRN.
 
 ## Important differences
 
-| Aspect | Formal thesis model | Public synthetic demonstration |
+| Aspect | Model used in reported experiments | Public synthetic demonstration |
 | :--- | :--- | :--- |
 | Source inputs | 1 + 32 + 4 + 28 = 65 dimensions | Random 12 / 8 / 4 / 3 dimensional sources |
 | Input construction | Fold-specific processing, frozen FinBERT2, cross-fitted risk | No financial preprocessing or text model |
@@ -39,10 +39,10 @@ python examples/synthetic_demo.py
 python -m unittest discover -s tests -v
 ```
 
-The tests check deterministic top-half selection (including ties), zero-initialized residual identity, the frozen-anchor gradient boundary and missing-relation behavior. They test this public implementation only; they do not audit or reproduce the thesis experiments.
+The tests check deterministic top-half selection (including ties), zero-initialized residual identity, the frozen-anchor gradient boundary and missing-relation behavior. They test this public implementation only; they do not audit or reproduce the reported experiments.
 
 For real inputs, callers must construct valid, deduplicated peer sets without self-links and enforce their own temporal and information-availability boundaries. This repository does not ship a production ingestion or deployment workflow.
 
 ## What is deliberately absent
 
-Raw/processed data, company identifiers and labels, sample-level predictions, checkpoints, private experiment controllers, full artifact histories and thesis drafts are not distributed. Reproducing the thesis requires the official data, exact feature identities, trained assets and research protocol; the showcase is not a substitute for them.
+Raw/processed data, company identifiers and labels, sample-level predictions, checkpoints, private experiment controllers and full artifact histories are not distributed. Reproducing the reported experiments requires the official data, exact feature identities, trained assets and evaluation protocol; the showcase is not a substitute for them.

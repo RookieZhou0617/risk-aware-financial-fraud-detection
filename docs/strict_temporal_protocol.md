@@ -28,7 +28,7 @@ Four development folds are not pooled with the final test into a five-year model
 
 ### Historical-label availability is an assumption
 
-FiGraph's annual label organization does not itself establish exact real-world disclosure dates. The thesis treats prior annual labels as available according to its annual protocol. This is a study assumption; it must not be advertised as fully verified, disclosure-date-level point-in-time deployment.
+FiGraph's annual label organization does not itself establish exact real-world disclosure dates. The evaluation treats prior annual labels as available according to its annual protocol. This is a study assumption; it must not be advertised as fully verified, disclosure-date-level point-in-time deployment.
 
 ### The 2022 boundary is protocol-specific
 

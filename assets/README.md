@@ -5,15 +5,15 @@ The presentation uses a restrained navy / teal palette; orange marks a negative 
 | Asset | Purpose / source |
 | :--- | :--- |
 | [research-cover.svg](research-cover.svg) | Original vector cover; network is decorative, not measured data |
-| [model-framework.png](model-framework.png) | Latest thesis Figure 3-1, rendered unchanged at 3000 × 2187 |
+| [model-framework.png](model-framework.png) | Model architecture, rendered at 3000 × 2187 |
 | [evidence-overview.svg](evidence-overview.svg) | Data-backed vector figure from reviewed aggregate results |
 | [evidence-overview.png](evidence-overview.png) | Raster version of the same result chart |
 
-## Thesis Figure 3-1
+## Model architecture
 
-The author explicitly selected thesis Figure 3-1 for reuse. The public PNG was refreshed on **2026-10-11** from the approved `chapter3_model_framework_v4.pdf` in thesis revision `4ca0c78`. That PDF is the 2026-10-06 export of the author-refined V4 second canvas. The public conversion changes resolution only, not wording, layout or arrows. The older 2026-10-01 PNG still present in the research checkout was not used.
+The author-approved model architecture was refreshed on **2026-10-11** at 3000 × 2187 pixels. The export preserves its wording, layout and arrows. It describes the model used in the reported experiments, not the simplified synthetic demonstration.
 
-The update includes the thesis's wording “交叉拟合风险分数”, “企业自身风险锚点” and “空关系通道”. Legacy relation-channel labels in the figure are explained separately in [the methodology](../docs/methodology.md). Only the final PNG is distributed, not other draft canvases, embedded editable XML or the full thesis source.
+Legacy relation-channel labels in the figure are explained separately in [the methodology](../docs/methodology.md). Only the final PNG is distributed, without embedded editable XML or private source files.
 
 Public PNG SHA-256:
 
@@ -32,4 +32,4 @@ python scripts/render_assets.py
 
 The renderer reads only [docs/evidence.json](../docs/evidence.json); it never loads private data or predictions. Matplotlib is an optional presentation dependency, not a model-runtime dependency. The result chart keeps development and final testing separate, uses a zero-based final-score axis, preserves the 2019 negative increment and labels LightGBM as a descriptive, different-input reference. Archived Bootstrap evidence remains in the [experiment supplement](../docs/experiments.md#supplementary-evidence), rather than the headline graphic.
 
-The script deliberately does not redraw or overwrite the thesis model figure. To update that figure, review and copy the new approved export, then update its recorded checksum here.
+The script deliberately does not redraw or overwrite the model architecture. To update that figure, review and copy the new approved export, then update its recorded checksum here.

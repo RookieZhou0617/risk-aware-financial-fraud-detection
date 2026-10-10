@@ -1,4 +1,4 @@
-"""Software invariants on synthetic inputs; not thesis experiment replication."""
+"""Software invariants on synthetic inputs; not formal experiment replication."""
 
 import unittest
 

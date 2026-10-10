@@ -1,7 +1,7 @@
 """Render public presentation assets from reviewed aggregates, never predictions.
 
 Run: python scripts/render_assets.py (requires matplotlib).
-The author's thesis Figure 3-1 is intentionally NOT regenerated here.
+The author-approved model architecture is intentionally NOT regenerated here.
 """
 
 from __future__ import annotations
@@ -43,7 +43,7 @@ def render_cover() -> None:
 <rect width="1280" height="400" rx="20" fill="url(#bg)"/>
 <path d="M 56 54 H 94" stroke="#6AD3C9" stroke-width="4"/>
 <g font-family="Arial,Helvetica,sans-serif">
-<text x="110" y="60" font-size="15" letter-spacing="3" fill="#A9C9D6">MASTER'S THESIS · RESEARCH SHOWCASE</text>
+<text x="110" y="60" font-size="15" letter-spacing="3" fill="#A9C9D6">FINANCIAL FRAUD DETECTION · EXPERIMENTAL RESULTS</text>
 <text x="54" y="146" font-size="67" font-weight="700" letter-spacing="-2" fill="#FFFFFF">MSAR-HGRN</text>
 <text x="57" y="196" font-size="27" fill="#EDF5F8">Financial fraud detection</text>
 <text x="57" y="240" font-size="21" fill="#BBD1DD">An intrinsic risk anchor.</text>

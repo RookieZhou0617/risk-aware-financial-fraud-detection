@@ -66,7 +66,7 @@ The auxiliary **LightGBM-Source65** reference uses the same annual 65-dimensiona
 
 Real and shuffled arms share the residual structure, candidate training-step grid and validation-selection rule, **not necessarily the selected step count**. The 2021 validation selected 300 steps for real relations and 20 for shuffled relations. The final result supports predictive relational supplementation under this protocol, not a same-step isolation of topology alone.
 
-## 5 · Locally evaluated baselines and the thesis models
+## 5 · Locally evaluated baselines and the proposed models
 
 | Model | AUC-PR ↑ | AUC-ROC ↑ | LogLoss ↓ | F1 @ 0.5 ↑ | R@5% ↑ | R@10% ↑ |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -88,11 +88,11 @@ MSAR-HGRN's AUC-PR is **+0.099586** above the tabular LightGBM reference. Its me
 
 These models share the audited final evaluation population, but **their input families and modeling pipelines differ**. LightGBM's 0.407467 and MSAR-HGRN's 0.507052 can be compared descriptively; the difference does not isolate architecture under matched source inputs. Poor RGCN/HGT results here do not establish that these architectures are generally ineffective.
 
-The supplementary **LightGBM-Source65** same-input comparison has status `BLOCKED_INPUT_UNAVAILABLE` for 2022. No test prediction or metric exists for that row. Do not substitute the ordinary LightGBM result or another text encoder; see [the availability explanation](research_status.md#source65-is-an-availability-blocker).
+The supplementary **LightGBM-Source65** same-input comparison has status `BLOCKED_INPUT_UNAVAILABLE` for 2022. No test prediction or metric exists for that row. Do not substitute the ordinary LightGBM result or another text encoder; see [the availability explanation](experiment_status.md#source65-is-an-availability-blocker).
 
 ## 6 · FiGraph literature reports: a separate evidence group
 
-These rows synchronize the latest thesis Table 4-8 with its original-source verification. They are **reported paper means, not our local 2022 reproductions**. Input families, year aggregation and evaluation protocols differ.
+These rows were checked against the original sources. They are **reported paper means, not our local 2022 reproductions**. Input families, year aggregation and evaluation protocols differ.
 
 | Method | Reported AUC-PR / AP | Reported AUC-ROC | Source and setting |
 | :--- | ---: | ---: | :--- |
@@ -113,7 +113,7 @@ The results do **not** establish causal fraud transmission, uniformly positive t
 
 ## Provenance
 
-The presentation was synchronized on **2026-10-11** with thesis revision `4ca0c782b1c2a85ab02415946d725a043a2ace76`. Existing final and baseline aggregates are unchanged from the previous snapshot; added development summaries were checked directly against the accepted files. Updating the manuscript revision does not change an experiment's original run identity.
+The evidence snapshot was checked on **2026-10-11** against accepted result files. Existing final and baseline aggregates are unchanged from the previous snapshot; added development summaries were checked directly against accepted files. Source revision identifiers and original run identities are retained in [the aggregate JSON](evidence.json).
 
 | Evidence | Accepted source |
 | :--- | :--- |
@@ -129,7 +129,7 @@ These are source identifiers for traceability, not promises that the private art
 
 ## Supplementary evidence
 
-The revised thesis no longer includes Bootstrap or a standalone ranking-diagnostic section in its main narrative. The archived results below remain unchanged. Moving them out of the homepage does not establish significance or remove uncertainty.
+The archived results below complement the primary seed-mean comparisons. They remain unchanged; presenting them separately does not establish significance or remove uncertainty.
 
 <details>
 <summary>Archived Bootstrap uncertainty and seed-mean / ensemble distinctions</summary>

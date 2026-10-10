@@ -16,6 +16,6 @@ nodes=24, relations=3
 initial graph-residual max abs=0.000000
 ```
 
-Loss and attention numbers are smoke-check output, not accuracy claims. No FiGraph data, actual company labels, pretrained checkpoint or thesis prediction is loaded.
+Loss and attention numbers are smoke-check output, not accuracy claims. No FiGraph data, actual company labels, pretrained checkpoint or real-company prediction is loaded.
 
 See [the implementation boundary](../docs/implementation.md) before interpreting the code as a reproduction. Run software tests with `python -m unittest discover -s tests -v`.
