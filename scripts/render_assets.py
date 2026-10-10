@@ -73,7 +73,7 @@ def render_evidence() -> None:
     fig = plt.figure(figsize=(13, 5.4), facecolor="#F7FAFC")
     left = fig.add_axes([0.07, 0.25, 0.40, 0.48], facecolor="#F7FAFC")
     right = fig.add_axes([0.67, 0.25, 0.27, 0.48], facecolor="#F7FAFC")
-    fig.text(0.045, 0.925, "Relational gains, with their limits", fontsize=23, weight="bold")
+    fig.text(0.045, 0.925, "Company-level risk, relational evidence", fontsize=23, weight="bold")
     fig.text(0.045, 0.865, "Preset five-seed arithmetic means · AUC-PR = average precision", color=MUTED, fontsize=11)
     fig.text(0.07, 0.78, "01  ROLLING DEVELOPMENT", fontsize=12, weight="bold")
     fig.text(0.58, 0.78, "02  FIXED-PROTOCOL 2022 OOT", fontsize=12, weight="bold")
@@ -90,10 +90,11 @@ def render_evidence() -> None:
         left.text(i, value + (0.0016 if value >= 0 else -0.002), f"{value:+.4f}",
                   ha="center", va="bottom" if value >= 0 else "top", fontsize=11, weight="bold",
                   color=TEAL if value >= 0 else ORANGE)
-    names = ["MDRA", "Matched shuffle", "MSAR-HGRN"]
-    scores = [data["models"][name]["auc_pr"] for name in names]
-    right.barh(range(3), scores, height=0.46, color=["#718DA6", "#B6C5D0", TEAL], zorder=3)
-    right.set_yticks(range(3), names)
+    names = ["LightGBM", "MDRA", "Matched shuffle", "MSAR-HGRN"]
+    scores = [data["baselines"]["lightgbm"]["metrics"]["auc_pr"]]
+    scores += [data["models"][name]["auc_pr"] for name in names[1:]]
+    right.barh(range(4), scores, height=0.46, color=["#A8B8C6", "#718DA6", "#D1DCE4", TEAL], zorder=3)
+    right.set_yticks(range(4), names)
     right.invert_yaxis()
     right.set_xlim(0, 0.62)
     right.set_xticks([0, 0.2, 0.4, 0.6])
@@ -106,8 +107,8 @@ def render_evidence() -> None:
         for spine in ax.spines.values():
             spine.set_visible(False)
     fig.text(0.07, 0.13, "2019: negative transfer remains visible.", color=ORANGE, fontsize=11, weight="bold")
-    fig.text(0.58, 0.13, "Both paired bootstrap 95% intervals cross zero.", color=MUTED, fontsize=10)
-    fig.text(0.045, 0.04, "Development and final testing are separate; no pooled five-year score.  Source: docs/evidence.json", color=MUTED, fontsize=9)
+    fig.text(0.58, 0.13, "LightGBM uses different inputs; a descriptive reference.", color=MUTED, fontsize=10)
+    fig.text(0.045, 0.04, "Development and final testing are separate. No significance claim; supplementary evidence: docs/experiments.md", color=MUTED, fontsize=9)
     fig.savefig(ASSETS / "evidence-overview.svg", metadata={"Date": None, "Creator": "MSAR-HGRN public showcase"})
     svg_path = ASSETS / "evidence-overview.svg"
     svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text(encoding="utf-8").splitlines()) + "\n", encoding="utf-8")

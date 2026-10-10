@@ -1,6 +1,8 @@
 {
-  "snapshot_date": "2026-10-01",
-  "source_revision": "0776595279d9a483bb8e66b5d33dd48e51f1a28e",
+  "snapshot_date": "2026-10-11",
+  "source_revision": "4ca0c782b1c2a85ab02415946d725a043a2ace76",
+  "previous_snapshot_revision": "0776595279d9a483bb8e66b5d33dd48e51f1a28e",
+  "refresh_scope": "Manuscript, figure and evidence presentation synchronized; frozen scientific results unchanged. Additional development aggregates read from accepted files, not new predictions.",
   "metric": "average_precision_score (reported as AUC-PR)",
   "primary_aggregation": "arithmetic mean over seeds 42, 52, 62, 72, 82",
   "population": {
@@ -128,6 +130,64 @@
       "delta": 0.014009350238316398
     }
   ],
+  "anchor_controls": {
+    "aggregation": "Five-seed mean AUC-PR per year; four-year means weight years equally",
+    "no_deviation": {
+      "experimental_arm": "D0_R3_BACKBONE",
+      "years": {"2018": 0.538494468348268, "2019": 0.5768127315966451, "2020": 0.4961280837006047, "2021": 0.466468013933296}
+    },
+    "current_state_reference": {
+      "experimental_arm": "D1_CAPACITY_MATCHED_CURRENT_ONLY",
+      "years": {"2018": 0.5617462573575716, "2019": 0.5719201470313163, "2020": 0.48593313537851174, "2021": 0.45914738928145254}
+    },
+    "shuffled_history": {
+      "experimental_arm": "D2_SHUFFLED_HISTORY_DEVIATION",
+      "years": {"2018": 0.5171263807803973, "2019": 0.5629819619604385, "2020": 0.4857552090223979, "2021": 0.4937757800408896}
+    },
+    "real_company_history": {
+      "experimental_arm": "D3_REAL_COMPANY_DEVIATION",
+      "years": {"2018": 0.5977726393909168, "2019": 0.6360137958827558, "2020": 0.5067311310087963, "2021": 0.5795319352094103}
+    }
+  },
+  "relation_variants": {
+    "scope": "Development only; five-seed mean AUC-PR per year",
+    "anchor_conditioned_neighbor_attention": {
+      "experimental_arm": "A3_F1_REAL",
+      "years": {"2018": 0.5973519378539287, "2019": 0.6288720871368091, "2020": 0.5092061884321646, "2021": 0.5829341366841749}
+    },
+    "explicit_difference_representation": {
+      "experimental_arm": "A3_F2_REAL",
+      "years": {"2018": 0.5950738851351203, "2019": 0.6238272513727809, "2020": 0.5116724199230427, "2021": 0.5859727372341672}
+    }
+  },
+  "source65_development": {
+    "aggregation": "Five-seed mean AUC-PR per year",
+    "years": {"2018": 0.5246842699741424, "2019": 0.5719100853288044, "2020": 0.44842384313476025, "2021": 0.47465365890741334},
+    "final_2022_status": "BLOCKED_INPUT_UNAVAILABLE"
+  },
+  "literature_reports": {
+    "scope": "Original-paper reported means, synchronized with thesis source verification; not local 2022 reproductions or matched-input comparisons",
+    "ffd_dhg": {
+      "auc_pr_or_ap": 0.1493, "auc_roc": 0.7629,
+      "source": "https://www.sciencedirect.com/org/science/article/pii/S2771589226000044",
+      "table": "2", "setting": "Multi-year aggregate"
+    },
+    "tgtod_stationary": {
+      "auc_pr_or_ap": 0.1600, "auc_roc": 0.7860,
+      "source": "https://arxiv.org/pdf/2412.00984v1",
+      "table": "3", "setting": "Author preprint v1; stationary"
+    },
+    "glt_gad": {
+      "auc_pr_or_ap": 0.2630, "auc_roc": 0.7940,
+      "source": "https://link.springer.com/content/pdf/10.1007/s44196-026-01456-z.pdf",
+      "table": "2", "setting": "Paper-specific FiGraph split, preprocessing and ten-run aggregation"
+    },
+    "fsfdllm": {
+      "auc_pr_or_ap": 0.4889, "auc_roc": 0.8628,
+      "source": "https://spj.science.org/doi/10.34133/icomputing.0274",
+      "table": "2", "setting": "Multi-year aggregate"
+    }
+  },
   "bootstrap": {
     "replicates": 10000,
     "valid_replicates": 10000,
@@ -157,7 +217,12 @@
   "provenance": {
     "final": "final_2022_oot/20260918T132623475938Z: seed_metrics.csv and bootstrap.json",
     "development": "s24_2_anchor_selective_native_gnn/formal/20260905T014639704710Z: seed_metrics.csv",
-    "baselines": "baseline_benchmark/final_2022: per-model summary.json"
+    "baselines": "baseline_benchmark/final_2022: per-model summary.json",
+    "anchor_controls": "s16_risk_deviation_hetero_gnn/s16_1_current_history_deviation/20260901T094703Z/seed_metrics.csv",
+    "neighbor_attention": "s37_0r4_no_rerun_audit_contract_recovery/formal/20260918T012139125681Z-4ddc1d9d7ac04d879bf0eda6d5f35a15/year_metrics.csv",
+    "difference_variant": "f2_0_difference_aware_residual/formal/20260918T064542357942Z/year_metrics.csv",
+    "source65_development": "baseline_benchmark/development/lightgbm_source65/20260923T100024Z-665985d0/year_summary.csv",
+    "literature": "Thesis Table 4-8 and source-verification notes; original-paper links retained per row"
   },
   "scope": "Reviewed aggregate metrics only. No individual records, labels, predictions, or fitted parameters."
 }

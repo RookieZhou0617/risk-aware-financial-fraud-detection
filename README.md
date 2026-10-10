@@ -20,7 +20,7 @@ This project builds a multi-source, current–history risk anchor (**MDRA**), th
 
 | Research setting | Evaluation | Current stage |
 | :--- | :--- | :--- |
-| Financial features + MD&A + self-history + cross-fitted risk | 2018–2021 rolling development; fixed-protocol 2022 OOT | Model frozen; five-chapter thesis draft under revision |
+| Financial features + MD&A + self-history + cross-fitted risk | 2018–2021 rolling development; fixed-protocol 2022 OOT | Model frozen; abstracts and Chapters 1–5 revised |
 
 ## Method
 
@@ -32,30 +32,39 @@ This project builds a multi-source, current–history risk anchor (**MDRA**), th
 
 [![Thesis Figure 3-1: multi-source risk anchor and heterogeneous graph residual framework](assets/model-framework.png)](assets/model-framework.png)
 
-*Figure 3-1 from the current thesis, reused unchanged. Click for full resolution. [Detailed method](docs/methodology.md) · [Public implementation boundary](docs/implementation.md)*
+*Figure 3-1, exported from the latest thesis PDF without changing its layout or content. Click for full resolution. [Detailed method](docs/methodology.md) · [Public implementation boundary](docs/implementation.md)*
 
 The residual is exactly zero **at initialization**. Frozen parameters do not guarantee better future-year performance; the NULL channel can reduce reliance on relations but does not guarantee a zero learned residual.
 
 ## Evidence
 
-![Graph increments by development year and fixed-protocol final AUC-PR](assets/evidence-overview.svg)
+The evidence follows the two-stage design:
+
+- **Company history first.** MDRA outperforms the no-deviation, current-state-reference and shuffled-history controls in all four development years.
+- **Relations as a supplement.** MSAR-HGRN improves on MDRA in three of four development years and in the frozen 2022 comparison; 2019 remains negative.
+- **Risk ranking for targeted screening.** In 2022, the top 5% and 10% of companies capture 81.46% and 87.15% of positive cases, respectively, on average over the preset seeds.
+
+![Development-year graph increments and fixed-protocol 2022 comparisons](assets/evidence-overview.svg)
 
 ### Fixed-protocol 2022 OOT
 
 Same 5,132-company population, 123 positive cases. Primary results below are **arithmetic means over five preset seeds**, not metrics of averaged predictions. AUC-PR is computed as average precision.
 
-| Model / control | AUC-PR ↑ | AUC-ROC ↑ | LogLoss ↓ | F1 @ 0.5 ↑ | Recall @ 5% ↑ |
+| Model | AUC-PR ↑ | AUC-ROC ↑ | F1 @ 0.5 ↑ | Recall @ 5% ↑ | Recall @ 10% ↑ |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| MDRA · intrinsic anchor | 0.489256 | 0.945054 | 0.056671 | **0.585282** | 0.809756 |
-| MSAR-HGRN · real relations | **0.507052** | **0.947675** | **0.054272** | 0.576771 | **0.814634** |
+| LightGBM · tabular reference | 0.407467 | 0.925975 | 0.316580 | 0.622764 | 0.764228 |
+| MDRA · company-level anchor | 0.489256 | 0.945054 | **0.585282** | 0.809756 | 0.866667 |
+| MSAR-HGRN · real relations | **0.507052** | **0.947675** | 0.576771 | **0.814634** | **0.871545** |
 
 Real relations improve mean AUC-PR by **+0.017797** over MDRA and **+0.017414** over the matched shuffled-relation control (AUC-PR 0.489639). Both paired comparisons are positive in 5/5 seeds.
 
-> **Interpretation, not a victory claim.** Company-level paired bootstrap 95% intervals cross zero for both comparisons. The 2019 development fold shows negative transfer, and final F1 at 0.5 decreases relative to MDRA. This is directional evidence of relational increment, not statistical significance, uniform improvement, or established temporal robustness.
+Compared with the 901-dimensional tabular LightGBM reference, MSAR-HGRN has **+0.099586 AUC-PR** and **+19.19 / +10.73 percentage points** in Recall@5% / Recall@10%. This comparison is descriptive: the input families differ, so it does not isolate architecture under matched inputs.
 
-Six runnable external baselines are also reported, including LightGBM (AUC-PR 0.407467). Their input families differ from the thesis model; this is **not an input-matched architecture leaderboard**. The Source65 same-input control remains unavailable for 2022.
+The primary benefit is ranking and budget-limited screening, not improvement in every metric: F1 at 0.5 is lower than MDRA, and relational gains vary by year. Statistical significance and uniform temporal robustness are not established; [archived uncertainty and ensemble results](docs/experiments.md#supplementary-evidence) remain available.
 
-[Full results, uncertainty & baselines →](docs/experiments.md) · [Temporal protocol →](docs/strict_temporal_protocol.md) · [Reviewed aggregate numbers →](docs/evidence.json)
+The experiment page separates locally evaluated baselines from FiGraph literature reports, including FSFDLLM. The Source65 same-input reference is available for development only, not for 2022.
+
+[Controls, variants, baselines & literature →](docs/experiments.md) · [Temporal protocol →](docs/strict_temporal_protocol.md) · [Reviewed aggregate numbers →](docs/evidence.json)
 
 ## Run the demo
 
@@ -78,7 +87,7 @@ This is a compact educational implementation, **not a one-command reproduction o
 | Start here | What you will find |
 | :--- | :--- |
 | [Methodology](docs/methodology.md) | Source representations, history deviations, graph residual and training boundary |
-| [Evaluation](docs/experiments.md) | Development heterogeneity, final controls, six baselines, uncertainty |
+| [Evaluation](docs/experiments.md) | History controls, module variants, final screening results, baselines and literature |
 | [Temporal protocol](docs/strict_temporal_protocol.md) | Selection / refit windows and historical-label availability assumptions |
 | [Implementation guide](docs/implementation.md) | Model-to-code map and explicit differences from the research implementation |
 | [Research & writing status](docs/research_status.md) | Frozen experiments, thesis naming, manuscript progress and branch roles |
@@ -95,4 +104,4 @@ This repository publishes reviewed aggregate results, methodology, compact code 
 
 ---
 
-<sub>Research snapshot: 2026-10-01 · Experiment IDs D3 / F0 remain unchanged in source evidence; public thesis names are MDRA / MSAR-HGRN.</sub>
+<sub>Research snapshot: 2026-10-11 · Frozen results unchanged; synchronized with thesis revision 4ca0c78. Experiment IDs D3 / F0 remain unchanged.</sub>

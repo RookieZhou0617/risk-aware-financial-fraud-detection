@@ -19,7 +19,7 @@ The formal model uses four source groups, totaling 65 dimensions before source-w
 
 | Source | Dimension | Construction |
 | :--- | ---: | :--- |
-| Base risk | 1 | Cross-fitted intrinsic / financial / self-history risk logit |
+| Cross-fitted risk | 1 | Risk logit from combined company-level / financial / self-history features |
 | Financial content | 32 | Fold-fitted PCA representation of financial features |
 | Self-history | 4 | Historical risk probability, count, confidence and availability |
 | MD&A text | 28 | Frozen FinBERT2 representation, fold-fitted PCA to 27 dimensions, plus a missing-text indicator |
@@ -39,9 +39,13 @@ At hidden dimension 16, this is a 50-dimensional input to a source-specific MLP 
 
 The final anchor combines the current state, deviation state and history-availability indicator: 33 → 16 with GELU. The anchor classifier provides an intrinsic logit and risk probability.
 
+The thesis tests this organization against no-deviation, current-state-reference and shuffled-history controls. The **current-state-reference control** replaces the historical reference inside the deviation branch with the current source state; it retains historical information already present in the base inputs and the history-availability indicator. It is not a history-free model. The current-state-reference, shuffled-history and real-history arms share the encoding structure and parameter count; see [the development evidence](experiments.md#1--does-company-history-help-build-the-anchor).
+
 ## 3 · Anchor-guided peer selection
 
 The formal graph branch uses ten native relation channels derived from FiGraph's heterogeneous relations, including shared-background-entity channels and direct company links. Candidate peers exclude the target company.
+
+FiGraph's target nodes are listed companies; background categories are **non-listed companies, natural persons, auditors and other entities**. Legacy channel labels such as “股东” (`holder`, U-prefix) and “组织实体” (`organization`, O-prefix) correspond to the non-listed-company and other-entity categories. These channel names, also retained in the approved thesis diagram, are not additional official node categories. This terminology clarification does not change graph identities or construction rules.
 
 For each target and relation, rank candidates by cosine similarity to the frozen target anchor, then retain the top $\lceil n/2 \rceil$. Ties are resolved by ascending canonical peer index. Selection is deterministic, label-free and non-differentiable.
 
@@ -86,6 +90,6 @@ If all relation channels are unavailable and the graph context is zero, the bias
 
 ## 6 · Evidence-bound interpretation
 
-The 2018–2021 comparison includes negative transfer in 2019. Final 2022 mean AUC-PR improves relative to MDRA and matched shuffled relations, but sample-bootstrap intervals cross zero. This motivates an anchor-plus-increment framing, not a claim that the architecture eliminates harmful propagation.
+The 2018–2021 comparison supports company-specific historical references and includes a negative graph increment in 2019. Final 2022 mean AUC-PR and budget recall improve relative to MDRA, while F1 at 0.5 decreases. The results support an anchor-plus-increment framing, not a claim that the architecture eliminates harmful propagation. [Supplementary uncertainty evidence](experiments.md#supplementary-evidence) remains archived; no statistical-significance claim is made.
 
 The diagram and dimensions here describe the **formal thesis model**. The public code intentionally simplifies the feature pipeline, source encoder and training setup; see [the implementation guide](implementation.md).

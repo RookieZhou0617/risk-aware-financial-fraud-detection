@@ -2,7 +2,7 @@
 
 [Home](../README.md) · [中文首页](../README_CN.md)
 
-Snapshot checked on **2026-10-01** against all four remote branches of the research repository. This page summarizes current scope; it is not a research execution authorization.
+Snapshot updated on **2026-10-11** against the current `thesis-synthesis` checkout (`4ca0c78`), manuscript and accepted result files. The four-branch review below was performed on 2026-10-01; only the thesis branch is newly checked in this refresh. This page summarizes scope, not research execution authorization.
 
 ## Current state
 
@@ -13,32 +13,40 @@ Snapshot checked on **2026-10-01** against all four remote branches of the resea
 | Main research question | Heterogeneous relational increment above a strong intrinsic risk anchor |
 | External baselines | Six runnable models have completed fixed-configuration 2022 evaluation |
 | Source65 same-input control | `BLOCKED_INPUT_UNAVAILABLE`; no 2022 prediction or metric |
-| Manuscript | Five-chapter draft and Chinese/English abstracts prepared; draft review integrated |
-| Latest visual | Author-refined thesis Figure 3-1, second canvas of the V4 source, exported 2026-10-01 |
+| Manuscript | Chinese/English abstracts and Chapters 1–5 have completed multiple rounds of revision |
+| Latest visual | Figure 3-1 from the approved V4 second-canvas PDF, exported to the public PNG on 2026-10-11; layout preserved |
 | Still distinct from completion | Manuscript revision, acknowledgments and final release; no claim of defense or publication |
 
-论文当前已进入写作与修订阶段，不再开展模型探索。展示重点由实验代号与流程历史转为“企业自身历史偏差—内生风险锚点—异构关系增量”，同时保留 2019 年负迁移、最终测试不确定性和指标取舍。
+论文当前已进入写作与修订阶段，不再开展模型探索。展示重点为“企业自身历史比较—风险锚点—异构关系补充—重点筛查”，同时保留2019年负增量与固定阈值F1的取舍。最新论文将Bootstrap与独立排序诊断章节移出正文；公开仓库仍保留既有补充证据，不改变冻结结果或宣称显著性。
 
 ## Branch roles, not competing latest models
 
 | Research branch | Checked revision | Meaning for this showcase |
 | :--- | :--- | :--- |
-| `thesis-synthesis` | `0776595` | Current thesis structure, terminology, baseline reporting and Figure 3-1 |
+| `thesis-synthesis` | `4ca0c78` · checked 2026-10-11 | Revised abstracts/chapters, control terminology, literature grouping, FiGraph categories and current Figure 3-1 |
 | `strict-temporal` | `9dd9108` | Frozen research history and final experiment closeout |
 | `main` | `b56a694` | High-level research closeout summary |
 | `research-workflow-v1` | `e4d4b1c` | Older workflow infrastructure branch, not a new scientific result |
 
-Branch entry documents, recent history and relevant differences were reviewed. Old stage notes on infrastructure/history branches must not override the current thesis closeout or be presented as active model development.
+The other three revisions record the 2026-10-01 branch review, not a new assertion about their current remote heads. Old stage notes on infrastructure/history branches must not override the current thesis closeout or be presented as active model development.
 
 ## Manuscript structure
 
 1. Introduction: motivation, research context and contributions.
 2. Related methods and technical foundations.
 3. Multi-source risk anchor and heterogeneous graph residual method.
-4. Temporal experiments, controls, baselines and result analysis.
+4. Experimental settings; multi-source anchor prediction; heterogeneous-relation prediction; 2022 results.
 5. Conclusions, limitations and future directions.
 
-Recent revisions explicitly distinguish annual historical-label assumptions from exact disclosure-date availability, preserve the limits of relation-semantic analysis, and remove non-final joint-graph paths from the main model narrative.
+Recent manuscript revisions:
+
+- Use **current-state-reference control / 当前状态参照对照** consistently. Historical information in base inputs and history availability remain present; only the reference inside the deviation branch changes.
+- Separate the **65-dimensional development LightGBM** from the **901-dimensional final tabular LightGBM**.
+- Add FiGraph literature reports alongside local results, with explicit source and protocol distinctions; interpret the result in terms of ranking and budget-limited screening.
+- Clarify FiGraph background node categories versus legacy graph-channel labels.
+- Retain the 2019 negative increment, distinguish development from final testing, and keep the accepted model and scientific artifacts frozen.
+
+The current handoff records a successful five-step thesis build and 59-page PDF. No new thesis build, experiment or prediction was run for this showcase refresh. A revised manuscript is not a claim of defense, publication or a new model release.
 
 ## Source65 is an availability blocker
 
